@@ -11,8 +11,36 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 export class AuthService {
   constructor(private prisma: PrismaService) {}
 
-  signin() {
-    return { msg: "I have signed in" };
+  async signin(dto: AuthDto) {
+    // find the user by email
+    const user =
+      await this.prisma.user.findUnique({
+        where: {
+          email: dto.email,
+        },
+      });
+
+    // if user does not exist, throw exception
+    if (!user)
+      throw new ForbiddenException(
+        "Incorrect email or password",
+      );
+
+    // compare password
+    const pwMatches = await argon.verify(
+      user.hash,
+      dto.password,
+    );
+    // if password is incorrect, throw exception
+    if (!pwMatches) {
+      throw new ForbiddenException(
+        "Incorrect email or password",
+      );
+    }
+
+    // send back the user
+    delete user.hash;
+    return user;
   }
 
   async signup(dto: AuthDto) {
