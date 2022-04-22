@@ -1,19 +1,19 @@
 import {
-  IsEmail,
+  IsNotEmpty,
   IsOptional,
   IsString,
 } from "class-validator";
 
-export class EditUserDto {
-  @IsEmail()
+export class EditBookmarkDto {
+  @IsString()
   @IsOptional()
-  email?: string;
+  title?: string;
 
   @IsString()
   @IsOptional()
-  firstName?: string;
+  description?: string;
 
   @IsString()
   @IsOptional()
-  lastName?: string;
+  link?: string;
 }
