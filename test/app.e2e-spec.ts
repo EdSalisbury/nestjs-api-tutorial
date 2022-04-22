@@ -113,13 +113,24 @@ describe("App End-to-End", () => {
           .spec()
           .post("/auth/signin")
           .withBody(dto)
-          .expectStatus(200);
+          .expectStatus(200)
+          .stores("userAt", "access_token");
       });
     });
   });
 
   describe("User", () => {
-    describe("Get me", () => {});
+    describe("Get me", () => {
+      it("should get current user", () => {
+        return pactum
+          .spec()
+          .get("/users/me")
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .expectStatus(200);
+      });
+    });
     describe("Edit user", () => {});
   });
 
@@ -127,7 +138,7 @@ describe("App End-to-End", () => {
     describe("Create bookmark", () => {});
     describe("Get bookmark", () => {});
     describe("Get bookmark by id", () => {});
-    describe("Edit bookmark", () => {});
+    describe("Edit bookmark by id", () => {});
     describe("Delete bookmark", () => {});
   });
 });
