@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
@@ -66,6 +68,7 @@ export class BookmarkController {
     );
   }
 
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(":id")
   deleteBookmarkById(
     @GetUser("id") userId: number,
